@@ -1,0 +1,26 @@
+name: CI Pipeline - Build Report and Logs
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run build and generate logs/reports
+        run: |
+          mkdir -p build
+          bash scripts/build.sh | tee build/build-log.txt
+
+      - name: Upload build log and report
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: |
+            build/build-log.txt
+            build/build-report.txt
